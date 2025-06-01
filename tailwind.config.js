@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
@@ -9,3 +10,10 @@ module.exports = {
   },
   plugins: [],
 }
+=======
+module.exports = {
+  content: ["./src/**/*.{js,jsx}"],
+  theme: { extend: {} },
+  plugins: [],
+}
+>>>>>>> f754ac9ce04722ed49b09791c00da978e2b4c888
