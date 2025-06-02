@@ -1,8 +1,15 @@
 "use client";
 import { useState } from "react";
 
-const BirthForm = () => {
-  const [formData, setFormData] = useState({
+type FormData = {
+  name: string;
+  dob: string;
+  time: string;
+  place: string;
+};
+
+const BirthForm: React.FC = () => {
+  const [formData, setFormData] = useState<FormData>({
     name: "",
     dob: "",
     time: "",
@@ -10,9 +17,9 @@ const BirthForm = () => {
   });
 
   const [result, setResult] = useState<any>(null);
-  const [interpretation, setInterpretation] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [interpretation, setInterpretation] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -26,29 +33,34 @@ const BirthForm = () => {
     setInterpretation("");
 
     try {
-      // Step 1: Analyze birth data
-      const analyzeRes = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/analyze`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
+      const analyzeRes = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/analyze`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        }
+      );
 
       if (!analyzeRes.ok) throw new Error("Analysis failed.");
       const analyzeData = await analyzeRes.json();
       setResult(analyzeData);
 
-      // Step 2: Get AI interpretation
-      const interpretRes = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/interpret`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(analyzeData),
-      });
+      const interpretRes = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/interpret`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(analyzeData),
+        }
+      );
 
       if (!interpretRes.ok) throw new Error("Interpretation failed.");
       const interpretData = await interpretRes.json();
       setInterpretation(interpretData.message);
-    } catch (err: any) {
-      setError(err.message || "Something went wrong.");
+    } catch (err) {
+      if (err instanceof Error) setError(err.message);
+      else setError("Something went wrong.");
     } finally {
       setLoading(false);
     }
@@ -103,27 +115,27 @@ const BirthForm = () => {
         </button>
       </form>
 
-      {/* Loading Spinner */}
       {loading && (
-        <div className="mt-4 text-center text-blue-500 font-semibold">Please wait...</div>
+        <div className="mt-4 text-center text-blue-500 font-semibold">
+          Please wait...
+        </div>
       )}
 
-      {/* Error Message */}
       {error && (
         <div className="mt-4 text-red-500 bg-red-100 p-3 rounded-md text-center">
           {error}
         </div>
       )}
 
-      {/* Result Display */}
       {result && (
         <div className="mt-6 bg-gray-50 p-4 rounded-md">
           <h2 className="text-lg font-bold mb-2">Raw Chart Data</h2>
-          <pre className="text-sm whitespace-pre-wrap">{JSON.stringify(result, null, 2)}</pre>
+          <pre className="text-sm whitespace-pre-wrap">
+            {JSON.stringify(result, null, 2)}
+          </pre>
         </div>
       )}
 
-      {/* AI Interpretation */}
       {interpretation && (
         <div className="mt-6 bg-yellow-50 p-4 rounded-md">
           <h2 className="text-lg font-bold mb-2">AI Interpretation</h2>
