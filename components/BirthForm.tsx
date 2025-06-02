@@ -34,7 +34,7 @@ const BirthForm: React.FC = () => {
 
     try {
       const analyzeRes = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/analyze`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/analyze`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -47,7 +47,7 @@ const BirthForm: React.FC = () => {
       setResult(analyzeData);
 
       const interpretRes = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/interpret`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/interpret`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
