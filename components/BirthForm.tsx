@@ -34,7 +34,7 @@ const BirthForm: React.FC = () => {
 
     try {
       const analyzeRes = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/analyze`,
+        `https://bookingastro-backend.onrender.com/api/analyze`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -47,7 +47,7 @@ const BirthForm: React.FC = () => {
       setResult(analyzeData);
 
       const interpretRes = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/interpret`,
+        `https://bookingastro-backend.onrender.com/api/interpret`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
